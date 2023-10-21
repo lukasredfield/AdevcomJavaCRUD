@@ -22,7 +22,7 @@ public class EscritosAdapter implements EscritosPersistencePort {
     @Override
     public Escritos getEscritosById(Long id) {
         Optional<EscritosEntity> escritosEntity = this.escritosRepository.findById(id);
-        return escritosEntity.map(entity -> EscritosMapper.INSTANCE.toEscritos(entity)).orElse(null);
+        return escritosEntity.map(EscritosMapper.INSTANCE::toEscritos).orElse(null);
     }
 
 
