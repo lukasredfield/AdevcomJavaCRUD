@@ -32,7 +32,7 @@ public class EscritosEntity {
     @JoinColumn(name = "tribunal_id", nullable = false)
     private TribunalEntity tribunal;
 
-    @Column(name = "asunto", nullable = false, length = 255)
+    @Column(name = "asunto", nullable = true, length = 255)
     private String asunto;
 
     @Column(name = "fec_ingreso", nullable = false)
@@ -49,11 +49,14 @@ public class EscritosEntity {
     @JoinColumn(name = "estado_id", nullable = false)
     private EstadoEntity estado;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
 
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    // Getters and setters
 }

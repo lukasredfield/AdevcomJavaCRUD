@@ -12,4 +12,6 @@ public class Tribunales {
     private Date createdAt;
     private Date updatedAt;
 
+
+
 }

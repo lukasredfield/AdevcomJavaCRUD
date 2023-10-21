@@ -1,15 +1,17 @@
 package com.adevcom.crud.infraestructure.persistence;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
-
+@Data
 @Entity
 @Table(name = "tipos")
 public class TipoEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "nom_tipo", length = 50, nullable = false)

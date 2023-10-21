@@ -1,14 +1,17 @@
 package com.adevcom.crud.infraestructure.persistence;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "estados")
 public class EstadoEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "nom_estados", length = 50, nullable = false)

@@ -23,4 +23,21 @@ public class Escritos {
     private Date createdAt;
     private Date updatedAt;
 
+    public static Escritos createNewEscrito(int nroEscritos, Tipos tipo, Servicios servicio, int jurisdiccion, Tribunales tribunal, String asunto, Date fecIngreso, int nroCausa, String observacion, Estados estado) {
+        Escritos escritos = new Escritos();
+        escritos.setNroEscritos(nroEscritos);
+        escritos.setTipo(tipo);
+        escritos.setServicio(servicio);
+        escritos.setJurisdiccion(jurisdiccion);
+        escritos.setTribunal(tribunal);
+        escritos.setAsunto(asunto);
+        escritos.setFecIngreso(fecIngreso);
+        escritos.setNroCausa(nroCausa);
+        escritos.setObservacion(observacion);
+        escritos.setEstado(estado);
+        escritos.setCreatedAt(new Date()); // Puedes establecer la fecha de creación aquí
+        return escritos;
+    }
+
+
 }

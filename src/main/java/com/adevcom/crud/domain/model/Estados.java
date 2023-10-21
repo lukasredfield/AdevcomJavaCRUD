@@ -12,4 +12,6 @@ public class Estados {
     private Date createdAt;
     private Date updatedAt;
 
+
+
 }

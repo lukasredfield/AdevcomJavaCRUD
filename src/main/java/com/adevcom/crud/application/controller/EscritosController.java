@@ -4,13 +4,14 @@ package com.adevcom.crud.application.controller;
 import com.adevcom.crud.application.mapper.EscritosRestMapper;
 import com.adevcom.crud.application.model.EscritosRequest;
 import com.adevcom.crud.application.model.EscritosResponse;
-import com.adevcom.crud.domain.model.Escritos;
+import com.adevcom.crud.domain.model.*;
 import com.adevcom.crud.domain.port.EscritosServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -21,12 +22,22 @@ public class EscritosController {
     private final EscritosServicePort escritosServicePort;
 
     @PostMapping("/new")
-    public ResponseEntity<EscritosResponse> newEscrito(@RequestBody EscritosRequest escritosRequest){
+    public ResponseEntity<EscritosResponse> newEscrito(@RequestBody EscritosRequest escritosRequest) {
+        // Mapear el EscritosRequest a un Escritos
         Escritos escritos = EscritosRestMapper.INSTANCE.toEscritos(escritosRequest);
+
+        // Asignar las relaciones directamente desde EscritosRequest
+        escritos.setEstado(escritosRequest.getEstado());
+        escritos.setTipo(escritosRequest.getTipo());
+        escritos.setServicio(escritosRequest.getServicio());
+        escritos.setTribunal(escritosRequest.getTribunal());
+        escritos.setCreatedAt(new Date());
+
         EscritosResponse escritosResponse = EscritosRestMapper.INSTANCE.toEscritosResponse(escritos);
         this.escritosServicePort.createEscritos(escritos);
         return ResponseEntity.ok().body(escritosResponse);
     }
+
 
 
     @GetMapping("/{id}")
@@ -38,7 +49,7 @@ public class EscritosController {
     @GetMapping("/getAll")
     public ResponseEntity<List<EscritosResponse>> getAllEscritos(){
         return ResponseEntity.ok(EscritosRestMapper.INSTANCE.
-                mapToEscritosListResponse(this.escritosServicePort.getAllEscritos())) ;
+                mapToEscritosListResponse(this.escritosServicePort.getAllEscritos()));
     }
 
     @DeleteMapping("delete/{id}")

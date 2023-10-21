@@ -12,4 +12,7 @@ public class Tipos {
     private Date createdAt;
     private Date updatedAt;
 
+
+
+
 }
