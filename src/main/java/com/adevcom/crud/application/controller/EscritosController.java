@@ -7,6 +7,7 @@ import com.adevcom.crud.application.model.EscritosResponse;
 import com.adevcom.crud.domain.model.*;
 import com.adevcom.crud.domain.port.EscritosServicePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,12 +59,40 @@ public class EscritosController {
     }
 
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<EscritosResponse> updateTask(@RequestBody EscritosRequest taskRequest, @PathVariable Long id){
-//        EscritosResponse taskResponse = EscritosRestMapper.INSTANCE.toEscritosResponse(this.taskServicePort.updateEscritos(id, taskRequest.getTitle(), taskRequest.getContent()));
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(taskResponse);
-//    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<EscritosResponse> updateEscrito(@RequestBody EscritosRequest escritosRequest, @PathVariable Long id) {
+        // Obtén el Escritos existente por ID
+        Escritos existingEscritos = this.escritosServicePort.getEscritosById(id);
+
+        // Verifica si el Escritos existente es nulo
+        if (existingEscritos == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Llama al servicio para actualizar el Escritos utilizando los parámetros adecuados
+        Escritos updatedEscritos = this.escritosServicePort.updateEscritos(
+                id,
+                escritosRequest.getNroEscritos(),
+                escritosRequest.getTipo(),
+                escritosRequest.getServicio(),
+                escritosRequest.getJurisdiccion(),
+                escritosRequest.getTribunal(),
+                escritosRequest.getAsunto(),
+                escritosRequest.getFecIngreso(),
+                escritosRequest.getNroCausa(),
+                escritosRequest.getObservacion(),
+                escritosRequest.getEstado()
+        );
+
+        // Verifica si el Escritos se actualizó con éxito
+        if (updatedEscritos == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Mapea el resultado actualizado a la respuesta y devuélvela
+        EscritosResponse escritosResponse = EscritosRestMapper.INSTANCE.toEscritosResponse(updatedEscritos);
+        return ResponseEntity.ok().body(escritosResponse);
+    }
 
 
 }

@@ -11,7 +11,7 @@ public interface EscritosPersistencePort {
 
     void deleteEscritos(Long id);
 
-//    Escritos updateEscritos(Long id, String title, String content);
+    Escritos updateEscritos(Escritos escritos);
 
     Escritos createEscritos(Escritos writings);
 
