@@ -9,3 +9,46 @@
 #      - '5432'
 #
 #
+#
+#version: '3.1'
+#
+#services:
+#
+#  user-service:
+#    build:
+#      context: ./crud
+#      dockerfile: ./Dockerfile
+#    image: crud
+#    container_name: crud
+#    environment:
+#      - JAVA_OPTS=-Dspring.profiles.active=$ENVIRONMENT -Xmx256m -Xms256m
+#    ports:
+#      - '8081:8081'
+#    depends_on:
+#      - crud-service-database
+#    networks:
+#      - service-network
+#
+#  user-service-database:
+#    image: postgres:15.3-alpine
+#    container_name: crud-database
+#    hostname: crud-database
+#    restart: always
+#    environment:
+#      POSTGRES_USER: $USER_SERVICE_DATASOURCE_USER
+#      POSTGRES_PASSWORD: $USER_SERVICE_DATASOURCE_PASSWORD
+#      POSTGRES_DB: escritos-database
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - db:/var/lib/postgresql/data
+#    networks:
+#      - service-network
+#
+#
+#volumes:
+#  db:
+#
+#networks:
+#  service-network:
+#    driver: bridge
