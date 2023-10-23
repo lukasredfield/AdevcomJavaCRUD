@@ -1,6 +1,5 @@
 package com.adevcom.crud.infraestructure.adapter;
 
-
 import com.adevcom.crud.domain.model.*;
 import com.adevcom.crud.domain.port.EscritosPersistencePort;
 import com.adevcom.crud.infraestructure.mapper.EscritosMapper;
@@ -8,6 +7,8 @@ import com.adevcom.crud.infraestructure.persistence.EscritosEntity;
 import com.adevcom.crud.infraestructure.repository.EscritosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.adevcom.crud.domain.model.Escritos.EstadosEscrito;
+
 
 import java.util.Date;
 import java.util.List;
@@ -22,14 +23,16 @@ public class EscritosAdapter implements EscritosPersistencePort {
     @Override
     public Escritos getEscritosById(Long id) {
         Optional<EscritosEntity> escritosEntity = this.escritosRepository.findById(id);
-        return escritosEntity.map(EscritosMapper.INSTANCE::toEscritos).orElse(null);
+        return escritosEntity.map(entity -> {
+            Escritos escritos = EscritosMapper.INSTANCE.toEscritos(entity);
+            escritos.setRecepcion(entity.getRecepcion());
+            return escritos;
+        }).orElse(null);
     }
-
 
     @Override
     public void deleteEscritos(Long id) {
         this.escritosRepository.deleteById(id);
-
     }
 
     @Override
@@ -45,6 +48,8 @@ public class EscritosAdapter implements EscritosPersistencePort {
         // Convierte el objeto Escritos a EscritosEntity para actualizar los valores en la base de datos
         EscritosEntity existingEntity = existingEntityOptional.get();
         existingEntity.setNroEscritos(escritos.getNroEscritos());
+        existingEntity.setRecepcion(escritos.getRecepcion());
+
 
         // Actualiza las propiedades relacionadas
         existingEntity.setTipo(EscritosMapper.INSTANCE.toTipoEntity(escritos.getTipo()));
@@ -55,7 +60,6 @@ public class EscritosAdapter implements EscritosPersistencePort {
         existingEntity.setNroCausa(escritos.getNroCausa());
         existingEntity.setObservacion(escritos.getObservacion());
         existingEntity.setEstado(EscritosMapper.INSTANCE.toEstadoEntity(escritos.getEstado()));
-
         existingEntity.setUpdatedAt(new Date()); // Actualiza la fecha de modificación
 
         // Guarda los cambios actualizados en la base de datos
@@ -65,16 +69,15 @@ public class EscritosAdapter implements EscritosPersistencePort {
         return EscritosMapper.INSTANCE.toEscritos(updatedEntity);
     }
 
-
     @Override
     public Escritos createEscritos(Escritos escritos) {
-        EscritosEntity newEscritos = this.escritosRepository
-                .save(EscritosMapper.INSTANCE.toEscritosEntity(escritos));
+        escritos.setRecepcion(Escritos.EstadosEscrito.PENDIENTE); // Establece el valor predeterminado
+        EscritosEntity newEscritos = this.escritosRepository.save(EscritosMapper.INSTANCE.toEscritosEntity(escritos));
         return EscritosMapper.INSTANCE.toEscritos(newEscritos);
     }
 
     @Override
-    public List<Escritos> getAllEscritos(){
+    public List<Escritos> getAllEscritos() {
         List<EscritosEntity> entityList = this.escritosRepository.findAll();
         return EscritosMapper.INSTANCE.mapToEscritosList(entityList);
     }

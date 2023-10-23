@@ -22,6 +22,14 @@ public class Escritos {
     private Estados estado;
     private Date createdAt;
     private Date updatedAt;
+    private EstadosEscrito recepcion = EstadosEscrito.PENDIENTE;
+
+    public enum EstadosEscrito {
+        PENDIENTE,
+        RECEPCIONADO,
+        SIN_CAUSA
+    }
+
 
     public static Escritos createNewEscrito(int nroEscritos, Tipos tipo, Servicios servicio, int jurisdiccion, Tribunales tribunal, String asunto, Date fecIngreso, int nroCausa, String observacion, Estados estado) {
         Escritos escritos = new Escritos();
@@ -35,9 +43,11 @@ public class Escritos {
         escritos.setNroCausa(nroCausa);
         escritos.setObservacion(observacion);
         escritos.setEstado(estado);
-        escritos.setCreatedAt(new Date()); // Puedes establecer la fecha de creación aquí
+        escritos.setCreatedAt(new Date());
+        escritos.setRecepcion(EstadosEscrito.PENDIENTE); // Establece el estado de recepción como "PENDIENTE"
         return escritos;
     }
+
 
 
 }

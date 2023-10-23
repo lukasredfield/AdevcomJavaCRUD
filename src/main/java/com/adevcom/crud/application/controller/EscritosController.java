@@ -7,16 +7,15 @@ import com.adevcom.crud.application.model.EscritosResponse;
 import com.adevcom.crud.domain.model.*;
 import com.adevcom.crud.domain.port.EscritosServicePort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-
 @RestController
 @RequestMapping("/adevcom")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:28709", allowedHeaders = "*")
 public class EscritosController {
 
     private final EscritosServicePort escritosServicePort;
@@ -33,23 +32,24 @@ public class EscritosController {
         escritos.setTribunal(escritosRequest.getTribunal());
         escritos.setCreatedAt(new Date());
 
+        // Establece el valor predeterminado de "recepcion" a "PENDIENTE"
+        escritos.setRecepcion(Escritos.EstadosEscrito.PENDIENTE);
+
+
         EscritosResponse escritosResponse = EscritosRestMapper.INSTANCE.toEscritosResponse(escritos);
         this.escritosServicePort.createEscritos(escritos);
-        return ResponseEntity.ok().body(escritosResponse);  // ARREGLAR LA RESPUESTA DE "escritosResponse" !!!!!!!!!!!
+        return ResponseEntity.ok().body(escritosResponse);
     }
 
-
-
     @GetMapping("/{id}")
-    public ResponseEntity<EscritosResponse> getEscritos(@PathVariable Long id){
+    public ResponseEntity<EscritosResponse> getEscritos(@PathVariable Long id) {
         EscritosResponse escritosFound = EscritosRestMapper.INSTANCE.toEscritosResponse(escritosServicePort.getEscritosById(id));
         return ResponseEntity.ok(escritosFound);
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<EscritosResponse>> getAllEscritos(){
-        return ResponseEntity.ok(EscritosRestMapper.INSTANCE.
-                mapToEscritosListResponse(this.escritosServicePort.getAllEscritos()));
+    public ResponseEntity<List<EscritosResponse>> getAllEscritos() {
+        return ResponseEntity.ok(EscritosRestMapper.INSTANCE.mapToEscritosListResponse(this.escritosServicePort.getAllEscritos()));
     }
 
     @DeleteMapping("delete/{id}")
@@ -57,7 +57,6 @@ public class EscritosController {
         this.escritosServicePort.deleteEscritos(id);
         return ResponseEntity.ok().body(null);
     }
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<EscritosResponse> updateEscrito(@RequestBody EscritosRequest escritosRequest, @PathVariable Long id) {
@@ -89,10 +88,13 @@ public class EscritosController {
             return ResponseEntity.notFound().build();
         }
 
+        // Actualiza el campo "recepcion" si es proporcionado
+        if (escritosRequest.getRecepcion() != null) {
+            updatedEscritos.setRecepcion(escritosRequest.getRecepcion());
+        }
+
         // Mapea el resultado actualizado a la respuesta y devuélvela
         EscritosResponse escritosResponse = EscritosRestMapper.INSTANCE.toEscritosResponse(updatedEscritos);
-        return ResponseEntity.ok().body(escritosResponse);
+        return ResponseEntity.ok(escritosResponse);
     }
-
-
 }

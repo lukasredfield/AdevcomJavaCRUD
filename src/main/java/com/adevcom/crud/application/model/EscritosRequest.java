@@ -1,14 +1,10 @@
 package com.adevcom.crud.application.model;
 
-import com.adevcom.crud.domain.model.Estados;
-import com.adevcom.crud.domain.model.Servicios;
-import com.adevcom.crud.domain.model.Tipos;
-import com.adevcom.crud.domain.model.Tribunales;
+import com.adevcom.crud.domain.model.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
 @Data
 @NoArgsConstructor
 public class EscritosRequest {
@@ -25,5 +21,10 @@ public class EscritosRequest {
     private Estados estado;
     private Date createdAt;
     private Date updatedAt;
+    private Escritos.EstadosEscrito recepcion;
+
+
+    // Getters y setters
 }
+
 

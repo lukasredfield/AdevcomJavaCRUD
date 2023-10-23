@@ -35,6 +35,7 @@ CREATE TABLE tribunales (
 );
 
 -- Tabla escritos
+-- Tabla escritos
 CREATE TABLE escritos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     nro_escritos INT NOT NULL,
@@ -47,9 +48,11 @@ CREATE TABLE escritos (
     nro_causa INT NOT NULL,
     observacion VARCHAR(255) NOT NULL,
     estado_id INT NOT NULL,
-    created_at DATETIME ,
+    recepcion ENUM('PENDIENTE', 'RECEPCIONADO', 'SIN_CAUSA') NOT NULL,
+    created_at DATETIME,
     update_at DATETIME
 );
+
 
 -- Índice para la columna asunto en la tabla escritos
 CREATE INDEX escritos_asunto_IDX ON escritos (asunto);

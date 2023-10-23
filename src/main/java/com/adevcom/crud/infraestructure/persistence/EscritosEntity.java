@@ -1,5 +1,6 @@
 package com.adevcom.crud.infraestructure.persistence;
 
+import com.adevcom.crud.domain.model.Escritos;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -57,6 +58,11 @@ public class EscritosEntity {
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "recepcion", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Escritos.EstadosEscrito recepcion = Escritos.EstadosEscrito.PENDIENTE;
+
 
     // Getters and setters
 }
